@@ -1,7 +1,7 @@
-let moongose = require('mongoose');
-let Schema = moongose.Schema;
+var moongose = require('mongoose');
+var Schema = moongose.Schema;
 
-let GenreSchema = new Schema({
+var GenreSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -10,6 +10,10 @@ let GenreSchema = new Schema({
     }
 });
 
-GenreSchema.virtual('url').get(() => `/catalog/genre/${this._id}`);
+GenreSchema
+.virtual('url')
+.get(function() {
+    return '/catalog/genre/'+this._id;
+});
 
 module.exports = moongose.model('Genre', GenreSchema);

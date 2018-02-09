@@ -25,17 +25,17 @@ exports.genre_list = (req, res, next) => {
 
 // DISPLAY DETAIL PAGE FOR A SPECIFIC genre
 exports.genre_detail = function (req, res, next) {
-    var id = mongoose.Types.ObjectId(req.params.id);
+    // var id = mongoose.Types.ObjectId(req.params.id);
 
     async.parallel({
         genre: function (callback) {
-            Genre.findById(id)
+            Genre.findById(req.params.id)
                 .exec(callback);
         },
 
         genre_books: function (callback) {
             Book.find({
-                    'genre': id
+                    'genre': req.params.id
                 })
                 .exec(callback);
         },
@@ -55,10 +55,10 @@ exports.genre_detail = function (req, res, next) {
             title: 'Genre Detail',
             genre: results.genre,
             genre_books: results.genre_books
-            
+
         });
     });
-
+    // res.send(`${notImp} pag detail genre`);
 };
 
 // DISPLAY genre CREATE FORM ON GET 

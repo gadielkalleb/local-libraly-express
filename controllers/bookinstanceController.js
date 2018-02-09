@@ -18,7 +18,22 @@ exports.bookinstance_list = (req, res, next) => {
 };
 
 // DISPLAY DETAIL PAGE FOR A SPECIFIC bookinstance
-exports.bookinstance_detail = (req, res) => res.send(`${notImp} detail: ${req.params.id}`);
+exports.bookinstance_detail = (req, res, next) => {
+    BookInstance.findById(req.params.id)
+    .populate('book')
+    .exec(function(err, bookinstance){
+        if (err) next(err);
+        if (bookinstance==null) {
+            var err = new Error('Book copy not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('bookinstance_detail', {
+            title: `Book: ${bookinstance.book.title}`, 
+            bookinstance: bookinstance
+        });
+    })
+};
 
 // DISPLAY bookinstance CREATE FORM ON GET 
 exports.bookinstance_create_get = (req, res) => res.send(`${notImp} create GET`);
